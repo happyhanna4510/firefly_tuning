@@ -1,56 +1,57 @@
-# Metaheuristic-tuning
-Temat projektu: Optymalizacja parametrów sieci neuronowej z użyciem metaheurystyk inspirowanych naturą.
+# Metaheuristic Neural Network Tuning
 
-Opis zadania: Zadanie polegało na opracowaniu i przebadaniu algorytmu dobierania wag sieci neuronowej MLP wybraną techniką inspirowaną naturą,
-np. z listy Evolutionary Computation Bestiary (https://github.com/fcampelo/EC-Bestiary). 
+Projekt demonstruje wykorzystanie metaheurystyk do optymalizacji wag sieci MLP. Implementuje dwie metody inspirowane naturą:
 
-## Zaimplementowane algorytmy
-
-- **PSO** – Particle Swarm Optimization  
+- **PSO** – Particle Swarm Optimization
 - **Firefly Algorithm**
 
-Projekt wspiera zarówno osobne uruchamianie każdego algorytmu, jak i uruchomienie zbiorcze z porównaniem wyników.
+Repozytorium pozwala uruchomić pojedynczy algorytm lub oba jednocześnie w celu późniejszego porównania wyników.
 
----
+## Struktura repozytorium
 
-## Generowane wyniki
+```
+algorithms/   # implementacje PSO i Firefly
+models/       # prosty model MLP wraz z funkcją nadpisywania wag
+data/         # generowanie przykładowego zbioru danych (make_regression)
+utils/        # funkcje zapisu wyników i rysowania wykresów
+main.py       # punkt wejścia, obsługa CLI
+```
 
-Po zakończeniu działania algorytmu zapisywane są automatycznie:
+## Instalacja
 
-- `best_weights.csv` – najlepsze znalezione wagi
-- `config.txt` – konfiguracja eksperymentu
-- `history.csv` – przebieg MSE w czasie
-- `metrics.json` – dokładne metryki (`MSE`, `MAE`, `RMSE`, `R²`)
-- `predictions.png` – wykres przewidywań vs rzeczywistość
-- `convergence.png` – wykres zbieżności
-- `summary.txt` – podsumowanie wyników
-- `y_pred.csv` i `y_test.csv` – dane wyjściowe i rzeczywiste etykiety
-
-Jeśli użyto `--algorithm all`, dodatkowo generowany jest folder `results/compare/` z:
-
-- porównaniem metryk (`comparison_metrics.csv`)
-- rankingiem algorytmów (`comparison_ranks.csv`)
-- wspólnym wykresem zbieżności i błędów
-
----
-
-## Instalacja zależności
-
-Upewnij się, że masz zainstalowanego Pythona 3.8+.  
-Zainstaluj wszystkie wymagane biblioteki:
+Wymagany jest Python >=3.8. Zainstaluj zależności poleceniem:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Uruchomienie
-Aby uruchomić projekt:
+
+Domyślnie uruchamiany jest PSO:
 
 ```bash
 python main.py --algorithm pso
 ```
-Możliwe wartości --algorithm:
- - pso – uruchomienie tylko PSO
- - firefly – uruchomienie tylko Firefly
- - all – uruchomienie obu i automatyczne porównanie
+
+Możliwe wartości argumentu `--algorithm`:
+
+- `pso` – tylko Particle Swarm Optimization
+- `firefly` – tylko algorytm świetlików
+- `all` – oba algorytmy i automatyczne porównanie
+
+## Wyniki
+
+Dla każdego algorytmu tworzony jest podkatalog w `results/` zawierający m.in.:
+
+- `summary.txt` – krótkie podsumowanie przebiegu
+- `history.csv` – MSE w kolejnych iteracjach
+- `metrics.json` – zbiorcze metryki (MSE, MAE, RMSE, R²)
+- `predictions.png` – wykres przewidywań
+- `convergence.png` – zbieżność w czasie
+
+Przy uruchomieniu obu metod tworzony jest dodatkowo folder `results/compare/` z porównaniem metryk i wspólnym wykresem zbieżności.
+
+## Dalsze modyfikacje
+
+Parametry takie jak liczba cząstek/świetlików czy liczba iteracji można zmienić bezpośrednio w plikach `algorithms/pso.py` i `algorithms/firefly.py`. Dane treningowe generowane są syntetycznie w `data/dataset.py` i można je zastąpić własnym zbiorem.
 
